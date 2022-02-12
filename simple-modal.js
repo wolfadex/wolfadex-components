@@ -1,4 +1,4 @@
-/* Used for detecting clicks outside of 1 or more elements.
+/* A simple modal built on top of the `dialog.showModal()` APIs
  *
  * Add this script at the top of your HTML file and insert it into your DOM with:
  *
@@ -9,7 +9,7 @@
  * Then in your JS detect clicks outside with:
  *
  *     document
- *       .getElementById("click-parent")
+ *       .getElementByTag("simple-modal")
  *       .addEventListener("simple-modal", function() {
  *         // Handle click outside here
  *       });
@@ -44,6 +44,24 @@ customElements.define(
       } else {
         this._dialogElement.setAttribute(name, newValue);
       }
+    }
+
+    connectedCallback() {
+      this._dialogElement.addEventListener("cancel", this.onCancel);
+      this._dialogElement.addEventListener("close", this.onClose);
+    }
+
+    disconnectedCallback() {
+      this._dialogElement.removeEventListener("cancel", this.onCancel);
+      this._dialogElement.removeEventListener("close", this.onClose);
+    }
+
+    onCancel() {
+      this.dispatchEvent(new CustomEvent("cancel"));
+    }
+
+    onClose() {
+      this.dispatchEvent(new CustomEvent("close"));
     }
   }
 );
